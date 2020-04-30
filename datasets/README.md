@@ -1,4 +1,4 @@
-# File description and dataset generation
+# File description
 
 ## urls.txt
 This file contains downloadable urls for NYC taxi data from 2009 to 2015. This file could be edited according to users’ interests. 
@@ -16,7 +16,7 @@ This dataset is produced by ```filter.py```, it contains 2 columns, ```tag``` an
 * ```tag```: It contains the time range when each taxi trip ended. 
 * ```count```: The number of drop off in the date and time range indicated in ```tag```.
 
-
+# Dataset generation
 To produce data files from raw data, please connect to NYU HPC virtual machine, and follow the instruction below:
 1. ```module load python/gnu/3.6.5```
 2. ```module load spark/2.4.0```
