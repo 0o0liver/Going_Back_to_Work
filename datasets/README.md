@@ -19,4 +19,4 @@ To generate the desired data file, one must have access to NYU HPC, sample data 
 4. ```cd Going_Back_to_Work/datasets```
 5. ```cat urls.txt | xargs -n 1 -P 8 wget -c -P data/```
 6. ```hfs -put data```
-7. ```spark-submit --conf spark.pyspark.python=/share/apps/python/3.6.5/bin/python filter.py data street_number street_name``` (```street_number``` and ```street_name``` need to be substituted by the address of the interested building in Manhattan. For example, ```street_number``` could be ```124``` and ```street_name``` could be ```Hudson Street```)
+7. ```spark-submit --conf spark.pyspark.python=/share/apps/python/3.6.5/bin/python filter.py data address```, an example value for ```address``` could be ```american museum of natural history```.
