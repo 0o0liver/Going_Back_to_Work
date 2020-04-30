@@ -23,7 +23,7 @@ def filter_location(lat, lng):
 		return True
 	return False
 
-def get_group_tag(datetime):
+def get_datetime_tag(datetime):
 	'''
 	output a tag for dataframe to group on. 
 	format: yyyy-mm-dd hh-mm~hh-mm.
@@ -47,15 +47,44 @@ def get_group_tag(datetime):
 		range_tag = timeLst[0]+":51"+"~"+timeLst[0]+":59"
 	return date_tag + " " + range_tag
 
+def get_time_tag(datetime):
+	'''
+	output a tag for dataframe to group on.
+	format hh:mm~hh:mm.
+	tiem are grouped to 10 min interval
+	'''
+	lst = str(datetime).strip().split(" ")
+	timeLst = lst[-1].strip().split(":")
+	range_tag = ""
+	if int(timeLst[1]) <= 10:
+		range_tag = timeLst[0]+":00"+"~"+timeLst[0]+":10"
+	elif int(timeLst[1]) <= 20:
+		range_tag = timeLst[0]+":11"+"~"+timeLst[0]+":20"
+	elif int(timeLst[1]) <= 30:
+		range_tag = timeLst[0]+":21"+"~"+timeLst[0]+":30"
+	elif int(timeLst[1]) <= 40:
+		range_tag = timeLst[0]+":31"+"~"+timeLst[0]+":40"
+	elif int(timeLst[1]) <= 50:
+		range_tag = timeLst[0]+":41"+"~"+timeLst[0]+":50"
+	else:
+		range_tag = timeLst[0]+":51"+"~"+timeLst[0]+":59"
+	return range_tag
+
 # Execution code
 spark = SparkSession.builder.appName("going_back_work").getOrCreate()
 
 trips = spark.read.format("csv").options(header="true").load(sys.argv[1])
 
-datetime_to_tag = F.udf(get_group_tag, StringType())
+datetime_to_datetime_tag = F.udf(get_datetime_tag, StringType())
+
+datetime_to_time_tag = F.udf(get_time_tag, StringType())
 
 filter_function = F.udf(filter_location, BooleanType())
 
-result_df = trips.withColumn("Datetime_tag", datetime_to_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["End_Lat"], trips["End_Lon"])).groupby("Datetime_tag").count().orderBy("Datetime_tag")
+complete_result_df = trips.withColumn("tag", datetime_to_datetime_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["End_Lat"], trips["End_Lon"])).groupby("tag").count().orderBy("tag")
 
-result_df.toPandas().to_csv("date_count.csv", header=True, index=False)
+complete_result_df.toPandas().to_csv("dropoff_count_complete.csv", header=True, index=False)
+
+compress_result_df = trips.withColumn("tag", datetime_to_time_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["End_Lat"], trips["End_Lon"])).groupby("tag").count().orderBy("tag")
+
+compress_result_df.toPandas().to_csv("dropoff_count_compress.csv", header=True, index=False)
