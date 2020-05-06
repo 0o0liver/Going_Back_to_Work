@@ -6,6 +6,7 @@ from pyspark.sql.types import *
 
 # Get geolocation of query address
 query_addr = sys.argv[2]
+output_filename = query_addr.replace(" ", "_")
 geolocator = Nominatim(user_agent = "going_bakc_to_work")
 target_location = geolocator.geocode(query_addr)
 target_box = list(map(float, target_location.raw["boundingbox"]))
@@ -81,10 +82,18 @@ datetime_to_time_tag = F.udf(get_time_tag, StringType())
 
 filter_function = F.udf(filter_location, BooleanType())
 
-complete_result_df = trips.withColumn("tag", datetime_to_datetime_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["End_Lat"], trips["End_Lon"])).groupby("tag").count().orderBy("tag")
+#complete_result_df = trips.withColumn("tag", datetime_to_datetime_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["dropoff_latitude"], trips["dropoff_longitude"])).groupby("tag").count().orderBy("tag")
 
-complete_result_df.toPandas().to_csv("dropoff_count_complete.csv", header=True, index=False)
+#complete_result_df.toPandas().to_csv("dropoff_count_complete_" + output_filename  +  ".csv", header=True, index=False)
 
-compress_result_df = trips.withColumn("tag", datetime_to_time_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["End_Lat"], trips["End_Lon"])).groupby("tag").count().orderBy("tag")
+#compress_result_df = trips.withColumn("tag", datetime_to_time_tag("Trip_Dropoff_DateTime")).filter(filter_function(trips["dropoff_latitude"], trips["dropoff_longitude"])).groupby("tag").count().orderBy("tag")
 
-compress_result_df.toPandas().to_csv("dropoff_count_compress.csv", header=True, index=False)
+#compress_result_df.toPandas().to_csv("dropoff_count_compress_" + output_filename  + ".csv", header=True, index=False)
+
+#non_grouped_result_df = trips.filter(filter_function(trips["dropoff_latitude"], trips["dropoff_longitude"]))
+
+#non_grouped_result_df.toPandas().to_csv("non_grouped_result_" + output_filename + ".csv", header=True, index=False)
+
+dropoff_info = trips.filter(filter_function(trips["dropoff_latitude"], trips["dropoff_longitude"])).select("dropoff_datetime", "dropoff_latitude", "dropoff_longitude")
+
+dropoff_info.toPandas().to_csv("dropoff_" + output_filename + ".csv", header=True, index=False)
