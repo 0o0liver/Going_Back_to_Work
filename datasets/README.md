@@ -1,10 +1,13 @@
 # File description
 
-## [urls.txt](https://github.com/0o0liver/Going_Back_to_Work/blob/master/datasets/urls.txt)
+## urls.txt
 This file contains downloadable urls for NYC taxi data from 2010 to 2015. This file could be edited according to users’ interests. 
 
-## [filter.py](https://github.com/0o0liver/Going_Back_to_Work/blob/master/datasets/filter.py)
+## filter.py
 Code to produce a dataset that contains taxi drop off count at the location of interest during the course of a day. 
+
+## generate_data.ipynb
+Sample process for filtering taxi data. Demonstration purpose only, does not produce any data file. 
 
 # Dataset generation
 To produce data files from raw data, please connect to NYU HPC virtual machine, and follow the instruction below:
