@@ -22,7 +22,7 @@ To produce data files from raw data, please connect to NYU HPC virtual machine, 
 2. ```module load spark/2.4.0```
 3. ```git clone https://github.com/0o0liver/Going_Back_to_Work.git```
 4. ```cd Going_Back_to_Work/datasets```
-5. ```cat urls.txt | xargs -n 1 -P 8 wget -c -P data/```
+5. ```wget -i urls.txt -P data```
 6. ```hfs -put data```
 7. ```spark-submit --conf spark.pyspark.python=/share/apps/python/3.6.5/bin/python filter.py data address```, an example value for ```address``` could be ```american museum of natural history```.
 
