@@ -23,3 +23,12 @@ To better understand the demand of buildings, we used [Statsmodels Exponential S
 
 ![Imgur](https://i.imgur.com/vtX1eqK.png)
 
+## Scheduling strategy 1:
+The optimal policy for this scheduler is to approve as many requests as possible while under the safety threshold, which is determined by the building owner and passed in to the scheduler as a parameter. Other than the threshold parameter, the predicted demand model is passed in to the scheduler as well. The scheduler also has internal representation of the current state of the building. All of these attributes are used for the decision making process.
+
+Users can send in requests by specify the desired arrival time and length of stay (number of 30-minutes block), the scheduler then validate the request using two factors:
+* Availability: Simply check if the requested time slots still have space for one more person in the building, while the number of people in the building during these time slots are still under the safety threshold. 
+* Priority: This factor enforces the optimal policy of this scheduler, which is approving as many requests as possible. To do so, we make sure that multiple short requests are prioritized over one long request when there is little space left for requested time slots. This is achieved by checking with the internal demand model and this policy is activated for time slots that have high demands (predicted number of requests is higher than the threshold).
+
+The detailed implementation, testing and visualization of this strategy can be found [here]().
+
