@@ -26,7 +26,7 @@ We used 2010 to 2013 New York City data for demand analyzing and simulating. For
 Detailed implementation and demonstration is provided [here](https://github.com/0o0liver/Going_Back_to_Work/blob/master/datasets/generate_data.ipynb). Instruction on how to generate resultant data files can be found [here](https://github.com/0o0liver/Going_Back_to_Work/tree/master/datasets#dataset-generation). Resultant data for Goldman Sachs Building is provided [here](https://github.com/0o0liver/Going_Back_to_Work/tree/master/datasets/resultant_data). 
 
 ## Demand model prediction:
-To better understand the demand of buildings, we used [Statsmodels Exponential Smoothing](https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html) module with the [Holt-Winters' multiplicative method](https://orangematter.solarwinds.com/2019/12/15/holt-winters-forecasting-simplified/) to accurately reflect the demand model of buildings. We grouped all drop offs into 30-minutes-range groups with the amount of drop offs during each time group over the course of a day (sample data provided below). Then we feed the grouped data into our machine learning model to produce demand prediction, which will be used by scheduler for decision making. Detailed implementation can be found [here](https://github.com/0o0liver/Going_Back_to_Work/blob/master/Demand_Model_Prediction.ipynb). Visualized prediction is provided below.
+To better understand the demand of buildings, we used [Statsmodels Exponential Smoothing](https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html) module with the [Holt-Winters' multiplicative method](https://orangematter.solarwinds.com/2019/12/15/holt-winters-forecasting-simplified/) to accurately reflect the demand model of buildings. We grouped all drop offs into 30-minutes-range groups with the amount of drop offs during each time group over the course of a day (sample data provided below). Then we feed the grouped data into our machine learning model to produce demand prediction, which will be used by scheduler for decision making. Visualized prediction is provided below.
 
 ![Imgur](https://i.imgur.com/vtX1eqK.png)
 
@@ -45,7 +45,9 @@ Users can send in requests by specify the desired arrival time and length of sta
 * Availability: Simply check if the requested time slots still have space for one more person in the building, while the number of people in the building during these time slots are still under the safety threshold. 
 * Priority: This factor enforces the optimal policy of this scheduler, which is approving as many requests as possible. To do so, we make sure that multiple short requests are prioritized over one long request when there is little space left for requested time slots. This is achieved by checking with the internal demand model and this policy is activated for time slots that have high demands (predicted number of requests is higher than the threshold).
 
-The detailed implementation, testing and visualization of this strategy can be found [here]().
+### Results:
+
+![Imgur](https://i.imgur.com/9qX98wl.png)
 
 ## Scheduling Strategy 3:
 
@@ -57,7 +59,7 @@ For this strategy we use a Greedy Hill Climbing algorithm to try and estimate th
 
 ## Conclusion
 
-We've simplified our problem signifigantly, and opted for simple optimization strategies. As a result, we didn't see too much difference in terms of which strategy we used, though First Come First Serve seemed to be the best for maximizing utilization, while Strategy 3 seemed better for acceptance rate.
+We've simplified our problem signifigantly, and opted for simple optimization strategies. As a result, we didn't see too much difference in terms of which strategy we used, though Strategy 2 seemed to be the best for maximizing utilization, while Strategy 3 seemed better for acceptance rate. 
 
 ## Next Steps
 
